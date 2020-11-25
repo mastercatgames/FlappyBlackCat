@@ -22,29 +22,5 @@ public class GameController : MonoBehaviour
     {
         SceneManager.LoadScene(0);
         GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>().volume = 1f;
-        // StartCoroutine(FadeSound());
     }
-    // public void FadeSound()
-    // {
-    //     if (fadeTime == 0)
-    //     {
-    //         music.volume = 0;
-    //         return;
-    //     }
-    //     StartCoroutine(FadeSound());
-    // }
-    // public IEnumerator FadeSound()
-    // {
-    //     float t = fadeTime;
-    //     while (t > 0)
-    //     {
-    //         yield return null;
-    //         t -= Time.deltaTime;
-    //         music.volume = t / fadeTime;
-    //     }
-    //     print("Finished Coroutine");
-    //     yield break;        
-    // }
-
-
 }
