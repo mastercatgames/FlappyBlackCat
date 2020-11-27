@@ -7,25 +7,19 @@ using UnityEngine.UI;
 // ************** Flappy Black Cat ********************
 public class GameController : MonoBehaviour
 {
+    private PlayerController playerController;
+    [Header("=== UI ===")]
     public int Score;
     public Text scoreText;
-    public AudioSource point_sfx;
-    public float fadeTime = 1;
-    public AudioSource music;
-
     public GameObject menu;
     public GameObject firstTapButton;
-
     public GameObject jumpButton;
     public GameObject spawnVacuums;
-
-    public GameObject gameOverPanel;
-
-    private PlayerController playerController;
-
-     
-
-
+    public GameObject gameOverPanel;    
+    [Header("=== Audio ===")]
+    public AudioSource point_sfx;
+    public AudioSource music;
+    public float fadeTime = 1;
     void Start()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
