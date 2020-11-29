@@ -11,7 +11,8 @@ public class GameController : MonoBehaviour
     [Header("=== UI ===")]
     public int Score;
     public Text scoreText;
-    public Text gameplayText;
+    public Text TapToFlyText;
+    public Text ReadyText;
     public GameObject menu;
     public GameObject PlayButton;
     public GameObject firstTapButton;
@@ -22,6 +23,7 @@ public class GameController : MonoBehaviour
     public AudioSource point_sfx;
     public AudioSource music;
     public float fadeTime = 1;
+    public List<string> readyRamdomTexts;
     void Start()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -32,6 +34,14 @@ public class GameController : MonoBehaviour
         music = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>();
 
         ShowMenu();
+        SetReadyRamdomTexts();
+    }
+
+    private void SetReadyRamdomTexts()
+    {
+        readyRamdomTexts = new List<string>();
+        readyRamdomTexts.Add("Enjoy");
+        readyRamdomTexts.Add("Thanks for playing");
     }
 
     public void StartGame()
@@ -39,9 +49,13 @@ public class GameController : MonoBehaviour
         //menu.SetActive(false);        
         //menu.GetComponent<Animator>().Play("FadeOut_up_to_down");
         HideMenu();
-        firstTapButton.SetActive(true);
-        gameplayText.gameObject.SetActive(true);        
-        gameplayText.GetComponent<Animator>().Play("FadeIn_down_to_up");
+        // firstTapButton.SetActive(true);
+        // gameplayText.gameObject.SetActive(true);        
+        // gameplayText.GetComponent<Animator>().Play("FadeIn_down_to_up");
+
+        ReadyText.gameObject.SetActive(true);   
+        ReadyText.text = readyRamdomTexts[Random.Range(0,2)];     
+        ReadyText.GetComponent<Animator>().Play("FadeIn_down_to_up");
 
         playerController.showingPlayer = true;
     }
@@ -56,7 +70,7 @@ public class GameController : MonoBehaviour
 
     private void HideMenu()
     {
-        menu.GetComponent<Animator>().Play("FadeOut_up_to_down");
+        menu.GetComponent<Animator>().Play("FadeOut");
 
         foreach (Transform buttons in menu.transform)
         {
@@ -68,9 +82,17 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void ShowFirstTapButton()
+    {
+        firstTapButton.SetActive(true);
+        TapToFlyText.text = "Tap to fly";  
+        TapToFlyText.gameObject.SetActive(true);              
+        TapToFlyText.GetComponent<Animator>().Play("FadeIn");
+    }
+
     private void FadeOutTextAfterTime()
     {
-        gameplayText.GetComponent<Animator>().Play("FadeOut");
+        TapToFlyText.GetComponent<Animator>().Play("FadeOut");
     }
     
     public void FirstTap()
@@ -85,17 +107,22 @@ public class GameController : MonoBehaviour
 
         scoreText.GetComponent<Animator>().Play("FadeIn");
 
-        if (gameplayText.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("FadeIn_down_to_up"))
+        if (TapToFlyText.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("FadeIn_down_to_up"))
         {
             //If animation to show text still running, run FadeOut after time
             print("If animation to show text still running, run FadeOut after time");
             Invoke("FadeOutTextAfterTime", 1.5f);
-            gameplayText.GetComponent<Animator>().speed = 1.5f;
+            TapToFlyText.GetComponent<Animator>().speed = 1.5f;
         }
         else
         {
-            gameplayText.GetComponent<Animator>().Play("FadeOut");
+            TapToFlyText.GetComponent<Animator>().Play("FadeOut");
         }
+
+        // if (playerController.showingPlayer)
+        // {
+        //     playerController.speedToShowPlayer = 10f;
+        // }
     }
 
     public void GameOver()

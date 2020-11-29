@@ -335,6 +335,7 @@ MonoBehaviour:
   speed: 3
   showingPlayer: 0
   targetToMovePlayer: {fileID: 183493872}
+  speedToShowPlayer: 0
 --- !u!58 &989968388
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -648,7 +649,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Score: 0
   scoreText: {fileID: 0}
-  gameplayText: {fileID: 0}
+  TapToFlyText: {fileID: 0}
+  ReadyText: {fileID: 0}
   menu: {fileID: 0}
   PlayButton: {fileID: 0}
   firstTapButton: {fileID: 0}
@@ -658,6 +660,7 @@ MonoBehaviour:
   point_sfx: {fileID: 0}
   music: {fileID: 0}
   fadeTime: 1
+  readyRamdomTexts: []
 --- !u!82 &1428504934
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1543,6 +1546,7 @@ MonoBehaviour:
   speed: 3
   showingPlayer: 0
   targetToMovePlayer: {fileID: 0}
+  speedToShowPlayer: 0
 --- !u!58 &8513837926527232342
 CircleCollider2D:
   m_ObjectHideFlags: 0

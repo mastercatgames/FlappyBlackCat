@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private AudioSource music;
     public bool showingPlayer;
     public Transform targetToMovePlayer;
+    public float speedToShowPlayer;
 
     void Start()
     {
@@ -19,7 +20,7 @@ public class PlayerController : MonoBehaviour
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
         music = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>();
 
-        //targetToMovePlayer = new Vector3(0, transform.position.y, transform.position.z);
+        speedToShowPlayer = 0.7f;
     }
 
     void Update()
@@ -34,30 +35,20 @@ public class PlayerController : MonoBehaviour
     {
         if (showingPlayer)
         {
-            // transform.position = Vector3.MoveTowards(transform.position, targetToMovePlayer.position, 0.5f * Time.deltaTime);
-
-            // //Check if the position of the cube and sphere are approximately equal. (When done..)
-            // if (Vector3.Distance(transform.position, targetToMovePlayer.position) < 0.001f)
-            // { 
-            //     showingPlayer = false;
-            // }
-            //transform.position += Vector3.right * Time.deltaTime;
-            //transform.position += new Vector3(3f * Time.deltaTime , 0, 0);
-
-            
-
-            transform.position = Vector3.Lerp(transform.position, targetToMovePlayer.position, 0.8f * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetToMovePlayer.position, speedToShowPlayer * Time.deltaTime);
 
             //Check if the position of the cube and sphere are approximately equal. (When done..)
-            if (Vector3.Distance(transform.position, targetToMovePlayer.position) < 0.001f)
+            if (Vector3.Distance(transform.position, targetToMovePlayer.position) < 0.1f)
             { 
                 showingPlayer = false;
+                gameController.ShowFirstTapButton();
             }
 
-            //transform.position = Vector3.Lerp(transform.position, targetToMovePlayer, Time.deltaTime);
-
-        //     Vector3 newPos = new Vector3(transform.position.x + 2, transform.position.y, transform.position.z);
-        //  transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 1f);
+            if (Vector3.Distance(transform.position, targetToMovePlayer.position) < 0.2f)
+            {
+                //Hide ReadyText before finish the showingPlayer transition
+                gameController.ReadyText.GetComponent<Animator>().Play("FadeOut");
+            }
         }
     }
 
