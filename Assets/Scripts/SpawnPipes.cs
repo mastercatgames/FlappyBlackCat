@@ -9,10 +9,6 @@ public class SpawnPipes : MonoBehaviour
     public float maxHeight;
     public float minHeight;
     public float repeatRate;
-    void Start()
-    {
-        InvokeRepeating("SpawnVacuum_HardMode", 0f, repeatRate);
-    }
 
     void SpawnVacuum_EasyMode()
     {

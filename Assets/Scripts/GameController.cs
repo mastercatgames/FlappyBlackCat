@@ -20,19 +20,19 @@ public class GameController : MonoBehaviour
     public GameObject firstTapButton;
     public GameObject jumpButton;
     public GameObject spawnVacuums;
-    public GameObject gameOverPanel; 
+    public GameObject gameOverPanel;
 
     [Header("=== Audio ===")]
     public AudioSource point_sfx;
     public AudioSource music;
     public float fadeTime = 1;
     public List<string> readyRamdomTexts;
-    
+
     void Start()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         spawnPipes = GameObject.FindGameObjectWithTag("MainCamera").transform.Find("SpawnVacuums").GetComponent<SpawnPipes>();
-        
+
         Time.timeScale = 1;
 
         point_sfx = GetComponent<AudioSource>();
@@ -47,19 +47,14 @@ public class GameController : MonoBehaviour
         readyRamdomTexts = new List<string>();
         readyRamdomTexts.Add("Enjoy");
         readyRamdomTexts.Add("Thanks for playing");
-    }    
+    }
 
     public void StartGame()
     {
-        //menu.SetActive(false);        
-        //menu.GetComponent<Animator>().Play("FadeOut_up_to_down");
         HideMenu();
-        // firstTapButton.SetActive(true);
-        // gameplayText.gameObject.SetActive(true);        
-        // gameplayText.GetComponent<Animator>().Play("FadeIn_down_to_up");
 
-        ReadyText.gameObject.SetActive(true);   
-        ReadyText.text = readyRamdomTexts[Random.Range(0,2)];     
+        ReadyText.gameObject.SetActive(true);
+        ReadyText.text = readyRamdomTexts[Random.Range(0, 2)];
         ReadyText.GetComponent<Animator>().Play("FadeIn_down_to_up");
 
         playerController.showingPlayer = true;
@@ -87,11 +82,45 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void HideGameOver()
+    {
+        foreach (Transform buttons in gameOverPanel.transform)
+        {
+            if (buttons.GetComponent<Button>() != null)
+                buttons.GetComponent<Button>().interactable = false;
+
+            if (buttons.GetComponent<Animator>() == null)
+            {
+                buttons.Find("Text").GetComponent<Animator>().Play("FadeOut");
+                buttons.Find("Text").GetComponent<Animator>().speed = 3f;
+            }
+            else 
+            {
+                buttons.GetComponent<Animator>().Play("FadeOut");
+                buttons.GetComponent<Animator>().speed = 3f;
+            }
+
+            Invoke("AfterHideGameOver", 1f);
+        }
+    }
+
+    private void AfterHideGameOver()
+    {
+        gameOverPanel.SetActive(false);
+        foreach (Transform buttons in gameOverPanel.transform)
+        {
+            buttons.gameObject.SetActive(false);
+
+            if (buttons.GetComponent<Button>() != null)
+                buttons.GetComponent<Button>().interactable = true;
+        }
+    }
+
     public void ShowFirstTapButton()
     {
         firstTapButton.SetActive(true);
-        TapToFlyText.text = "Tap to fly";  
-        TapToFlyText.gameObject.SetActive(true);              
+        TapToFlyText.text = "Tap to fly";
+        TapToFlyText.gameObject.SetActive(true);
         TapToFlyText.GetComponent<Animator>().Play("FadeIn");
     }
 
@@ -99,7 +128,7 @@ public class GameController : MonoBehaviour
     {
         TapToFlyText.GetComponent<Animator>().Play("FadeOut");
     }
-    
+
     public void FirstTap()
     {
         firstTapButton.SetActive(false);
@@ -107,8 +136,8 @@ public class GameController : MonoBehaviour
         playerController.Jump();
 
         jumpButton.SetActive(true);
-        spawnVacuums.SetActive(true);        
-        scoreText.gameObject.SetActive(true);        
+        spawnVacuums.SetActive(true);
+        scoreText.gameObject.SetActive(true);
 
         scoreText.GetComponent<Animator>().Play("FadeIn");
 
@@ -124,43 +153,23 @@ public class GameController : MonoBehaviour
             TapToFlyText.GetComponent<Animator>().Play("FadeOut");
         }
 
-        // if (playerController.showingPlayer)
-        // {
-        //     playerController.speedToShowPlayer = 10f;
-        // }
+        spawnPipes.InvokeRepeating("SpawnVacuum_HardMode", 0f, spawnPipes.repeatRate);
     }
 
     public void GameOver()
     {
-        StartCoroutine(FadeAudioSource.StartFade(music, 3f, 0f));
+        StartCoroutine(FadeAudioSource.StartFade(music, 1f, 0.4f));
+
         gameOverPanel.SetActive(true);
         jumpButton.SetActive(false);
-        //scoreText.gameObject.SetActive(false);
         scoreText.GetComponent<Animator>().Play("FadeOut");
         scoreText.GetComponent<Animator>().speed = 3f;
-
-        //Time.timeScale = 0;
 
         spawnPipes.CancelInvoke();
 
         //Player
         playerController.transform.parent = null;
         StartCoroutine(SetActiveAfterTime(playerController.gameObject, false, 2.5f));
-
-        // float delayToShow = 1f;
-        //Hide All objects in panel
-        // foreach (Transform child in gameOverPanel.transform)
-        // {
-        //     // child.gameObject.SetActive(false);
-        //     // if (child.gameObject.name.Contains("Best"))
-        //     //     delayToShow = 1.5f;
-        //     // else if (child.gameObject.name.Contains("ContinueButton"))
-        //     //     delayToShow = 2f;
-        //     // else if (child.gameObject.name.Contains("RetryButton"))
-        //     //     delayToShow = 4f;
-
-        //     StartCoroutine(SetActiveAfterTime(child.gameObject, true, 0.5f/*delayToShow*/));
-        // }
 
         gameOverPanel.transform.Find("ScoreNum").Find("Text").GetComponent<Text>().text = scoreText.text;
 
@@ -175,8 +184,19 @@ public class GameController : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(0);
-        GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>().volume = 1f;
+        //Reset player position
+        Transform player = playerController.gameObject.transform;
+        player.SetParent(GameObject.FindGameObjectWithTag("MainCamera").transform);
+        player.GetComponent<Rigidbody2D>().simulated = false;        
+        player.gameObject.SetActive(true);
+        playerController.resetPlayerPosition = true;
+        playerController.speedToShowPlayer = 3f;
+        playerController.transform.rotation = Quaternion.identity;
+
+        HideGameOver();
+        StopAllCoroutines();
+
+        StartCoroutine(FadeAudioSource.StartFade(music, 1f, 1f));
     }
 
     public IEnumerator SetActiveAfterTime(GameObject gameObject, bool active, float delay)

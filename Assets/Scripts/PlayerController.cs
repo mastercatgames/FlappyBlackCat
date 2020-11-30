@@ -10,8 +10,10 @@ public class PlayerController : MonoBehaviour
     private GameController gameController;
     private AudioSource music;
     public bool showingPlayer;
+    public bool resetPlayerPosition;
     public Transform targetToMovePlayer;
-    public float speedToShowPlayer;
+    public Transform originPlayerPosition;
+    public float speedToShowPlayer;    
 
     void Start()
     {
@@ -41,6 +43,24 @@ public class PlayerController : MonoBehaviour
             if (Vector3.Distance(transform.position, targetToMovePlayer.position) < 0.1f)
             { 
                 showingPlayer = false;
+                gameController.ShowFirstTapButton();
+            }
+
+            if (Vector3.Distance(transform.position, targetToMovePlayer.position) < 0.2f)
+            {
+                //Hide ReadyText before finish the showingPlayer transition
+                gameController.ReadyText.GetComponent<Animator>().Play("FadeOut");
+            }
+        }
+
+        if (resetPlayerPosition)
+        {
+            transform.position = Vector3.Lerp(transform.position, originPlayerPosition.position, speedToShowPlayer * Time.deltaTime);
+
+            //Check if the position of the cube and sphere are approximately equal. (When done..)
+            if (Vector3.Distance(transform.position, originPlayerPosition.position) < 0.1f)
+            { 
+                resetPlayerPosition = false;
                 gameController.ShowFirstTapButton();
             }
 
