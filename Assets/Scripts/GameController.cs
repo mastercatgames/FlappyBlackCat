@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
     public GameObject jumpButton;
     public GameObject spawnVacuums;
     public GameObject gameOverPanel;
+    public GameObject optionsPanel;
 
     [Header("=== Audio ===")]
     public AudioSource point_sfx;
@@ -265,6 +266,18 @@ public class GameController : MonoBehaviour
     public void ReloadScene()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void OpenOptions()
+    {
+        HideMenu();
+
+        optionsPanel.SetActive(true);
+
+        foreach (Transform buttons in menu.transform)
+        {
+            buttons.GetComponent<Animator>().Play("FadeIn");
+        }
     }
 
 }

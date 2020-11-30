@@ -474,6 +474,16 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1428504932}
+    - target: {fileID: 8294034779918325199, guid: 7eb4b476d2dfe344eba7e8c989872fd0,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1428504932}
+    - target: {fileID: 1139629788996369102, guid: 7eb4b476d2dfe344eba7e8c989872fd0,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1428504932}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7eb4b476d2dfe344eba7e8c989872fd0, type: 3}
 --- !u!1 &637162014 stripped
@@ -554,6 +564,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe11c51aa0e95f549858916a90bfc0f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1548159900891243739 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1548159900891243739, guid: 7eb4b476d2dfe344eba7e8c989872fd0,
+    type: 3}
+  m_PrefabInstance: {fileID: 476916400}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2969738008953348417 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2969738008953348417, guid: 7eb4b476d2dfe344eba7e8c989872fd0,
@@ -610,6 +626,10 @@ PrefabInstance:
       propertyPath: gameOverPanel
       value: 
       objectReference: {fileID: 949382092}
+    - target: {fileID: 1428504932, guid: 0a021f38db72a764fb5a1dc001ae7d8b, type: 3}
+      propertyPath: optionsPanel
+      value: 
+      objectReference: {fileID: 1548159900891243739}
     - target: {fileID: 8513837925020930488, guid: 0a021f38db72a764fb5a1dc001ae7d8b,
         type: 3}
       propertyPath: m_LocalPosition.x
