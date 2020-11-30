@@ -664,6 +664,7 @@ MonoBehaviour:
   music: {fileID: 0}
   fadeTime: 1
   readyRamdomTexts: []
+  isRetry: 0
 --- !u!82 &1428504934
 AudioSource:
   m_ObjectHideFlags: 0

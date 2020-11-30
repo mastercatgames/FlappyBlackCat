@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour
     public AudioSource music;
     public float fadeTime = 1;
     public List<string> readyRamdomTexts;
+    public bool isRetry;
 
     void Start()
     {
@@ -37,6 +38,12 @@ public class GameController : MonoBehaviour
 
         point_sfx = GetComponent<AudioSource>();
         music = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>();
+
+        //Force to increase volume if player click in "Home" button
+        if (music.volume < 1)
+        {
+            StartCoroutine(FadeAudioSource.StartFade(music, 1f, 1f));
+        }
 
         ShowMenu();
         SetReadyRamdomTexts();
@@ -94,7 +101,7 @@ public class GameController : MonoBehaviour
                 buttons.Find("Text").GetComponent<Animator>().Play("FadeOut");
                 buttons.Find("Text").GetComponent<Animator>().speed = 3f;
             }
-            else 
+            else
             {
                 buttons.GetComponent<Animator>().Play("FadeOut");
                 buttons.GetComponent<Animator>().speed = 3f;
@@ -113,6 +120,13 @@ public class GameController : MonoBehaviour
 
             if (buttons.GetComponent<Button>() != null)
                 buttons.GetComponent<Button>().interactable = true;
+        }
+
+        if (isRetry)
+        {
+            gameOverPanel.transform.Find("ScoreNum").Find("Text").GetComponent<Text>().text = "0";
+            scoreText.text = "0";
+            isRetry = false;
         }
     }
 
@@ -137,7 +151,7 @@ public class GameController : MonoBehaviour
 
         jumpButton.SetActive(true);
         spawnVacuums.SetActive(true);
-        scoreText.gameObject.SetActive(true);
+        scoreText.gameObject.SetActive(true);        
 
         scoreText.GetComponent<Animator>().Play("FadeIn");
 
@@ -173,21 +187,43 @@ public class GameController : MonoBehaviour
 
         gameOverPanel.transform.Find("ScoreNum").Find("Text").GetComponent<Text>().text = scoreText.text;
 
+        if (int.Parse(scoreText.text) > PlayerPrefs.GetInt("highscore"))
+        {
+            PlayerPrefs.SetInt("highscore", int.Parse(scoreText.text));
+            gameOverPanel.transform.Find("Best").Find("Text").GetComponent<Text>().text = "New Best";
+        }
+        else
+        {
+            gameOverPanel.transform.Find("Best").Find("Text").GetComponent<Text>().text = "Best";
+        }
+
+        gameOverPanel.transform.Find("BestNum").Find("Text").GetComponent<Text>().text = PlayerPrefs.GetInt("highscore").ToString();
+
         //Activate objects smoothly
         StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("Score").gameObject, true, 0.2f));
         StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("ScoreNum").gameObject, true, 0.2f));
         StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("Best").gameObject, true, 0.5f));
         StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("BestNum").gameObject, true, 0.5f));
-        StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("ContinueButton").gameObject, true, 0.8f));
-        StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("RetryButton").gameObject, true, 3f));
+        if (int.Parse(scoreText.text) > 0)
+        {
+            StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("ContinueButton").gameObject, true, 0.8f));
+            StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("RetryButton").gameObject, true, 3f));
+        }
+        else
+        {
+            StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("RetryButton").gameObject, true, 1f));
+        }
+
+        StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("HomeButton").gameObject, true, 1f));
+        
     }
 
-    public void RestartGame()
+    private void RestartGame()
     {
         //Reset player position
         Transform player = playerController.gameObject.transform;
         player.SetParent(GameObject.FindGameObjectWithTag("MainCamera").transform);
-        player.GetComponent<Rigidbody2D>().simulated = false;        
+        player.GetComponent<Rigidbody2D>().simulated = false;
         player.gameObject.SetActive(true);
         playerController.resetPlayerPosition = true;
         playerController.speedToShowPlayer = 3f;
@@ -196,7 +232,19 @@ public class GameController : MonoBehaviour
         HideGameOver();
         StopAllCoroutines();
 
-        StartCoroutine(FadeAudioSource.StartFade(music, 1f, 1f));
+        StartCoroutine(FadeAudioSource.StartFade(music, 1f, 1f));        
+    }
+
+    public void Retry()
+    {
+        Score = 0;
+        isRetry = true;
+        RestartGame();
+    }
+
+    public void Continue()
+    {
+        RestartGame();
     }
 
     public IEnumerator SetActiveAfterTime(GameObject gameObject, bool active, float delay)
@@ -212,6 +260,11 @@ public class GameController : MonoBehaviour
         if (speed > 0)
             animator.speed = speed;
         print("Finish Animation!");
+    }
+
+    public void ReloadScene()
+    {
+        SceneManager.LoadScene(0);
     }
 
 }
