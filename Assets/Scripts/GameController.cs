@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour
     public float fadeTime = 1;
     public List<string> readyRamdomTexts;
     public bool isRetry;
+    public string difficulty;
 
     void Start()
     {
@@ -48,6 +49,13 @@ public class GameController : MonoBehaviour
 
         ShowMenu();
         SetReadyRamdomTexts();
+
+        if (PlayerPrefs.GetString("difficulty") == "")
+        {
+            PlayerPrefs.SetString("difficulty", "Easy");
+        }
+        
+        difficulty = PlayerPrefs.GetString("difficulty");
     }
 
     private void SetReadyRamdomTexts()
@@ -152,7 +160,7 @@ public class GameController : MonoBehaviour
 
         jumpButton.SetActive(true);
         spawnVacuums.SetActive(true);
-        scoreText.gameObject.SetActive(true);        
+        scoreText.gameObject.SetActive(true);
 
         scoreText.GetComponent<Animator>().Play("FadeIn");
 
@@ -168,7 +176,7 @@ public class GameController : MonoBehaviour
             TapToFlyText.GetComponent<Animator>().Play("FadeOut");
         }
 
-        spawnPipes.InvokeRepeating("SpawnVacuum_HardMode", 0f, spawnPipes.repeatRate);
+        spawnPipes.InvokeRepeating("SpawnVacuum_" + difficulty, 0f, spawnPipes.repeatRate);
     }
 
     public void GameOver()
@@ -216,7 +224,7 @@ public class GameController : MonoBehaviour
         }
 
         StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("HomeButton").gameObject, true, 1f));
-        
+
     }
 
     private void RestartGame()
@@ -233,7 +241,7 @@ public class GameController : MonoBehaviour
         HideGameOver();
         StopAllCoroutines();
 
-        StartCoroutine(FadeAudioSource.StartFade(music, 1f, 1f));        
+        StartCoroutine(FadeAudioSource.StartFade(music, 1f, 1f));
     }
 
     public void Retry()
@@ -274,10 +282,20 @@ public class GameController : MonoBehaviour
 
         optionsPanel.SetActive(true);
 
+        if (difficulty == "Easy")
+            optionsPanel.transform.Find("DifficultyToggle").Find("Easy").GetComponent<Toggle>().isOn = true;        
+        if (difficulty == "Hard")
+            optionsPanel.transform.Find("DifficultyToggle").Find("Hard").GetComponent<Toggle>().isOn = true;        
+
         foreach (Transform buttons in menu.transform)
         {
             buttons.GetComponent<Animator>().Play("FadeIn");
         }
     }
 
+    public void ChangeDifficulty(string difficulty_selected)
+    {
+        PlayerPrefs.SetString("difficulty", difficulty_selected);
+        difficulty = difficulty_selected;
+    }    
 }

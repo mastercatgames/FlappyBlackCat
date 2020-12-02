@@ -10,17 +10,19 @@ public class SpawnPipes : MonoBehaviour
     public float minHeight;
     public float repeatRate;
 
-    void SpawnVacuum_EasyMode()
+    void SpawnVacuum_Easy()
     {
-        GameObject newVacuum = Instantiate(vacuum_EasyMode);
-        newVacuum.transform.position = new Vector3(transform.position.x, Random.Range(minHeight, maxHeight), 0);
-        Destroy(newVacuum, 5f);
+        Spawn(Instantiate(vacuum_EasyMode));
     }
 
-     void SpawnVacuum_HardMode()
+    void SpawnVacuum_Hard()
     {
-        GameObject newVacuum = Instantiate(vacuum_HardMode);
-        newVacuum.transform.position = new Vector3(transform.position.x, Random.Range(minHeight, maxHeight), 0);
-        Destroy(newVacuum, 5f);
+        Spawn(Instantiate(vacuum_HardMode));
+    }
+
+    private void Spawn(GameObject vacuumPrefab)
+    {
+        vacuumPrefab.transform.position = new Vector3(transform.position.x, Random.Range(minHeight, maxHeight), 0);
+        Destroy(vacuumPrefab, 5f);
     }
 }

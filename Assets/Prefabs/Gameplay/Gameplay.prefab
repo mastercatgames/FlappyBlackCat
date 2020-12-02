@@ -666,6 +666,7 @@ MonoBehaviour:
   fadeTime: 1
   readyRamdomTexts: []
   isRetry: 0
+  difficulty: 
 --- !u!82 &1428504934
 AudioSource:
   m_ObjectHideFlags: 0
