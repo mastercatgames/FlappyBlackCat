@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour
     public GameObject spawnVacuums;
     public GameObject gameOverPanel;
     public GameObject optionsPanel;
+    public GameObject creditsPanel;
 
     [Header("=== Audio ===")]
     public AudioSource point_sfx;
@@ -278,8 +279,8 @@ public class GameController : MonoBehaviour
 
     public void OpenOptions()
     {
-        HideMenu();
-
+        //HideMenu();
+        menu.SetActive(false);
         optionsPanel.SetActive(true);
 
         if (difficulty == "Easy")
@@ -287,12 +288,25 @@ public class GameController : MonoBehaviour
         if (difficulty == "Hard")
             optionsPanel.transform.Find("DifficultyToggle").Find("Hard").GetComponent<Toggle>().isOn = true;        
 
-        foreach (Transform buttons in menu.transform)
-        {
-            buttons.GetComponent<Animator>().Play("FadeIn");
-        }
+        // foreach (Transform buttons in menu.transform)
+        // {
+        //     buttons.GetComponent<Animator>().Play("FadeIn");
+        // }
     }
 
+    public void OpenCredits()
+    {
+        optionsPanel.SetActive(false);
+        creditsPanel.SetActive(true);
+    }
+
+    public void BackToOptions()
+    {
+        creditsPanel.SetActive(false);
+        OpenOptions();
+        // optionsPanel.SetActive(true);
+    }
+    
     public void ChangeDifficulty(string difficulty_selected)
     {
         PlayerPrefs.SetString("difficulty", difficulty_selected);

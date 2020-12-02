@@ -661,6 +661,7 @@ MonoBehaviour:
   spawnVacuums: {fileID: 8513837925540121233}
   gameOverPanel: {fileID: 0}
   optionsPanel: {fileID: 0}
+  creditsPanel: {fileID: 0}
   point_sfx: {fileID: 0}
   music: {fileID: 0}
   fadeTime: 1
