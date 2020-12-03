@@ -5,16 +5,16 @@ using UnityEngine;
 public class Points : MonoBehaviour
 {
 
-    public GameController controller;    
+    public GameController gameController;
 
     void Start()
     {
-        controller = FindObjectOfType<GameController>();        
-    } 
-        void OnTriggerEnter2D(Collider2D colisor)
+        gameController = FindObjectOfType<GameController>();
+    }
+    void OnTriggerEnter2D(Collider2D colisor)
     {
-        controller.Score++;
-        controller.scoreText.text = controller.Score.ToString();
-        controller.point_sfx.Play();
+        gameController.Score++;
+        gameController.scoreText.text = gameController.Score.ToString();
+        // gameController.point_sfx.Play();
     }
 }

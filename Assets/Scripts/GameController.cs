@@ -9,6 +9,9 @@ public class GameController : MonoBehaviour
 {
     private PlayerController playerController;
     private SpawnPipes spawnPipes;
+    public List<string> readyRamdomTexts;
+    public bool isRetry;
+    public string difficulty;
 
     [Header("=== UI ===")]
     public int Score;
@@ -18,29 +21,23 @@ public class GameController : MonoBehaviour
     public GameObject menu;
     public GameObject PlayButton;
     public GameObject firstTapButton;
-    public GameObject jumpButton;
-    public GameObject spawnVacuums;
+    public GameObject jumpButton;    
     public GameObject gameOverPanel;
     public GameObject optionsPanel;
     public GameObject creditsPanel;
 
     [Header("=== Audio ===")]
-    public AudioSource point_sfx;
     public AudioSource music;
-    public float fadeTime = 1;
-    public List<string> readyRamdomTexts;
-    public bool isRetry;
-    public string difficulty;
+    // public AudioSource point_sfx;    
+    public float fadeTime = 1;    
 
     void Start()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         spawnPipes = GameObject.FindGameObjectWithTag("MainCamera").transform.Find("SpawnVacuums").GetComponent<SpawnPipes>();
-
-        Time.timeScale = 1;
-
-        point_sfx = GetComponent<AudioSource>();
         music = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>();
+
+        Time.timeScale = 1;        
 
         //Force to increase volume if player click in "Home" button
         if (music.volume < 1)
@@ -48,18 +45,18 @@ public class GameController : MonoBehaviour
             StartCoroutine(FadeAudioSource.StartFade(music, 1f, 1f));
         }
 
-        ShowMenu();
-        SetReadyRamdomTexts();
+        ShowMenu();        
+        LoadReadyRamdomTexts();
 
         if (PlayerPrefs.GetString("difficulty") == "")
         {
             PlayerPrefs.SetString("difficulty", "Easy");
         }
-        
+
         difficulty = PlayerPrefs.GetString("difficulty");
     }
 
-    private void SetReadyRamdomTexts()
+    private void LoadReadyRamdomTexts()
     {
         readyRamdomTexts = new List<string>();
         readyRamdomTexts.Add("Enjoy");
@@ -160,7 +157,7 @@ public class GameController : MonoBehaviour
         playerController.Jump();
 
         jumpButton.SetActive(true);
-        spawnVacuums.SetActive(true);
+        // spawnVacuums.SetActive(true);
         scoreText.gameObject.SetActive(true);
 
         scoreText.GetComponent<Animator>().Play("FadeIn");
@@ -284,9 +281,9 @@ public class GameController : MonoBehaviour
         optionsPanel.SetActive(true);
 
         if (difficulty == "Easy")
-            optionsPanel.transform.Find("DifficultyToggle").Find("Easy").GetComponent<Toggle>().isOn = true;        
+            optionsPanel.transform.Find("DifficultyToggle").Find("Easy").GetComponent<Toggle>().isOn = true;
         if (difficulty == "Hard")
-            optionsPanel.transform.Find("DifficultyToggle").Find("Hard").GetComponent<Toggle>().isOn = true;        
+            optionsPanel.transform.Find("DifficultyToggle").Find("Hard").GetComponent<Toggle>().isOn = true;
 
         // foreach (Transform buttons in menu.transform)
         // {
@@ -306,10 +303,15 @@ public class GameController : MonoBehaviour
         OpenOptions();
         // optionsPanel.SetActive(true);
     }
-    
+
     public void ChangeDifficulty(string difficulty_selected)
     {
         PlayerPrefs.SetString("difficulty", difficulty_selected);
         difficulty = difficulty_selected;
-    }    
+    }
+
+    public void CallJump()
+    {
+        playerController.Jump();
+    }
 }

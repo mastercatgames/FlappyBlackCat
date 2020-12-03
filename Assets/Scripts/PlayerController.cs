@@ -19,7 +19,9 @@ public class PlayerController : MonoBehaviour
     {
         rig = GetComponent<Rigidbody2D>();
         //jump_sfx = GetComponent<AudioSource>();
-        gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        //gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        //gameController = GameObject.FindGameObjectWithTag("UI").GetComponent<GameController>();
+        gameController = FindObjectOfType<GameController>();
         music = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>();
 
         speedToShowPlayer = 0.7f;
