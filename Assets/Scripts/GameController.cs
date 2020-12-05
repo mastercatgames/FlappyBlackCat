@@ -8,12 +8,9 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
     private PlayerController playerController;
-    private SpawnPipes spawnPipes;
-    public List<string> readyRamdomTexts;
-    public bool isRetry;
-    public string difficulty;
+    private SpawnPipes spawnPipes;   
 
-    [Header("=== UI ===")]
+    [Header("♦ UI")]
     public int Score;
     public Text scoreText;
     public Text TapToFlyText;
@@ -25,11 +22,16 @@ public class GameController : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject optionsPanel;
     public GameObject creditsPanel;
-
-    [Header("=== Audio ===")]
+    
+    [Header("♦ Audio")]
     public AudioSource music;
     // public AudioSource point_sfx;    
-    public float fadeTime = 1;    
+    public float fadeTime = 1;
+
+    [Header("♦ Other variables")]
+    public List<string> readyRamdomTexts;
+    public bool isRetry;
+    public string difficulty;
 
     void Start()
     {
@@ -194,7 +196,7 @@ public class GameController : MonoBehaviour
 
         gameOverPanel.transform.Find("ScoreNum").Find("Text").GetComponent<Text>().text = scoreText.text;
 
-        if (int.Parse(scoreText.text) > PlayerPrefs.GetInt("highscore"))
+        if (Score > PlayerPrefs.GetInt("highscore"))
         {
             PlayerPrefs.SetInt("highscore", int.Parse(scoreText.text));
             gameOverPanel.transform.Find("Best").Find("Text").GetComponent<Text>().text = "New Best";
