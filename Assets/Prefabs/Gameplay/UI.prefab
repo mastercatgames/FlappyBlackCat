@@ -1661,7 +1661,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: a9cface2c639b604986151e8aaf3e498, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 570eff2e35e48dc4f83a3d07d17b43f5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1812,7 +1812,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: a9cface2c639b604986151e8aaf3e498, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 570eff2e35e48dc4f83a3d07d17b43f5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2727,9 +2727,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe11c51aa0e95f549858916a90bfc0f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  readyRamdomTexts: []
-  isRetry: 0
-  difficulty: 
   Score: 0
   scoreText: {fileID: 2140481674461085963}
   TapToFlyText: {fileID: 2969738008953348417}
@@ -2742,8 +2739,10 @@ MonoBehaviour:
   optionsPanel: {fileID: 1548159900891243739}
   creditsPanel: {fileID: 7493920909570837281}
   music: {fileID: 0}
-  point_sfx: {fileID: 0}
   fadeTime: 1
+  readyRamdomTexts: []
+  isRetry: 0
+  difficulty: 
 --- !u!223 &2140481674078140560
 Canvas:
   m_ObjectHideFlags: 0
