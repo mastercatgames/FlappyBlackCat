@@ -11,9 +11,6 @@ public class GameController : MonoBehaviour
     private SpawnPipes spawnPipes;
     private UnityAds unityAds;
 
-    [Header("♦ Ads")]
-    public int countToShowAd;
-
     [Header("♦ UI")]
     public int Score;
     public Text scoreText;
@@ -240,10 +237,11 @@ public class GameController : MonoBehaviour
         StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("HomeButton").gameObject, true, 1f));
 
         //Advertisement
-        countToShowAd++;
-        if (countToShowAd == 3)
+        PlayerPrefs.SetInt("countToShowAd", PlayerPrefs.GetInt("countToShowAd") + 1);
+        
+        if (PlayerPrefs.GetInt("countToShowAd") == 3)
         {
-            countToShowAd = 0;
+            PlayerPrefs.SetInt("countToShowAd", 0);
             StartCoroutine(unityAds.ShowVideoAd());
         }
     }
@@ -280,9 +278,9 @@ public class GameController : MonoBehaviour
 
     public void Continue()
     {
-        if (countToShowAd > 0)
+        if (PlayerPrefs.GetInt("countToShowAd") > 0)
         {
-            countToShowAd--;
+            PlayerPrefs.SetInt("countToShowAd", PlayerPrefs.GetInt("countToShowAd") - 1);
         }
         isContinue = true;
         unityAds.ShowRewardedVideo();
