@@ -223,11 +223,15 @@ public class GameController : MonoBehaviour
         StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("BestNum").gameObject, true, 0.5f));
         if (int.Parse(scoreText.text) > 0)
         {
-            if (!isContinue)
+            if (isContinue)
+            {
+                StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("RetryButton").gameObject, true, 1f));
+            }
+            else
             {
                 StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("ContinueButton").gameObject, true, 0.8f));
+                StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("RetryButton").gameObject, true, 3f));
             }
-            StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("RetryButton").gameObject, true, 3f));
         }
         else
         {

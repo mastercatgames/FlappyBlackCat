@@ -6,8 +6,8 @@ using UnityEngine.Advertisements;
 public class UnityAds : MonoBehaviour
 {
     private GameController gameController;
-    string gameId = "3928067";
-    public bool testMode = false;
+    private string gameId = "3928067";
+    private bool testMode = false;
 
     void Start()
     {
