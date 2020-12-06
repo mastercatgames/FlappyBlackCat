@@ -38,6 +38,11 @@ public class GameController : MonoBehaviour
     public bool isRetry;
     public bool isContinue;
 
+    void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
+
     void Start()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -264,7 +269,7 @@ public class GameController : MonoBehaviour
     {
         Score = 0;
         isRetry = true;
-        
+
         if (isContinue)
         {
             isContinue = false;
@@ -275,7 +280,10 @@ public class GameController : MonoBehaviour
 
     public void Continue()
     {
-        countToShowAd--;
+        if (countToShowAd > 0)
+        {
+            countToShowAd--;
+        }
         isContinue = true;
         unityAds.ShowRewardedVideo();
     }
