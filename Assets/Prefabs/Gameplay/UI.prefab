@@ -2677,6 +2677,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2140481674078140561}
   - component: {fileID: 1092809595}
+  - component: {fileID: 2342074947099800111}
   - component: {fileID: 2140481674078140560}
   - component: {fileID: 2140481674078140563}
   - component: {fileID: 2140481674078140562}
@@ -2743,6 +2744,18 @@ MonoBehaviour:
   readyRamdomTexts: []
   isRetry: 0
   difficulty: 
+--- !u!114 &2342074947099800111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140481674078140565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdecb705b6edfdf4683476519655854d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!223 &2140481674078140560
 Canvas:
   m_ObjectHideFlags: 0

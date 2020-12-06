@@ -8,7 +8,11 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
     private PlayerController playerController;
-    private SpawnPipes spawnPipes;   
+    private SpawnPipes spawnPipes;
+    private UnityAds unityAds;
+
+    [Header("♦ Ads")]
+    public int countToShowAd;
 
     [Header("♦ UI")]
     public int Score;
@@ -18,11 +22,11 @@ public class GameController : MonoBehaviour
     public GameObject menu;
     public GameObject PlayButton;
     public GameObject firstTapButton;
-    public GameObject jumpButton;    
+    public GameObject jumpButton;
     public GameObject gameOverPanel;
     public GameObject optionsPanel;
     public GameObject creditsPanel;
-    
+
     [Header("♦ Audio")]
     public AudioSource music;
     // public AudioSource point_sfx;    
@@ -30,16 +34,18 @@ public class GameController : MonoBehaviour
 
     [Header("♦ Other variables")]
     public List<string> readyRamdomTexts;
-    public bool isRetry;
     public string difficulty;
+    public bool isRetry;
+    public bool isContinue;
 
     void Start()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         spawnPipes = GameObject.FindGameObjectWithTag("MainCamera").transform.Find("SpawnVacuums").GetComponent<SpawnPipes>();
         music = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>();
+        unityAds = GetComponent<UnityAds>();
 
-        Time.timeScale = 1;        
+        Time.timeScale = 1;
 
         //Force to increase volume if player click in "Home" button
         if (music.volume < 1)
@@ -47,7 +53,7 @@ public class GameController : MonoBehaviour
             StartCoroutine(FadeAudioSource.StartFade(music, 1f, 1f));
         }
 
-        ShowMenu();        
+        ShowMenu();
         LoadReadyRamdomTexts();
 
         if (PlayerPrefs.GetString("difficulty") == "")
@@ -215,7 +221,10 @@ public class GameController : MonoBehaviour
         StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("BestNum").gameObject, true, 0.5f));
         if (int.Parse(scoreText.text) > 0)
         {
-            StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("ContinueButton").gameObject, true, 0.8f));
+            if (!isContinue)
+            {
+                StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("ContinueButton").gameObject, true, 0.8f));
+            }
             StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("RetryButton").gameObject, true, 3f));
         }
         else
@@ -225,9 +234,16 @@ public class GameController : MonoBehaviour
 
         StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("HomeButton").gameObject, true, 1f));
 
+        //Advertisement
+        countToShowAd++;
+        if (countToShowAd == 3)
+        {
+            countToShowAd = 0;
+            StartCoroutine(unityAds.ShowVideoAd());
+        }
     }
 
-    private void RestartGame()
+    public void RestartGame()
     {
         //Reset player position
         Transform player = playerController.gameObject.transform;
@@ -248,12 +264,20 @@ public class GameController : MonoBehaviour
     {
         Score = 0;
         isRetry = true;
+        
+        if (isContinue)
+        {
+            isContinue = false;
+        }
+
         RestartGame();
     }
 
     public void Continue()
     {
-        RestartGame();
+        countToShowAd--;
+        isContinue = true;
+        unityAds.ShowRewardedVideo();
     }
 
     public IEnumerator SetActiveAfterTime(GameObject gameObject, bool active, float delay)

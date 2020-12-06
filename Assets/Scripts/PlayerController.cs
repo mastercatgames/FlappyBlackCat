@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     public bool resetPlayerPosition;
     public Transform targetToMovePlayer;
     public Transform originPlayerPosition;
-    public float speedToShowPlayer;    
+    public float speedToShowPlayer;
 
     void Start()
     {
@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
             //Check if the position of the cube and sphere are approximately equal. (When done..)
             if (Vector3.Distance(transform.position, targetToMovePlayer.position) < 0.1f)
-            { 
+            {
                 showingPlayer = false;
                 gameController.ShowFirstTapButton();
             }
@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
 
             //Check if the position of the cube and sphere are approximately equal. (When done..)
             if (Vector3.Distance(transform.position, originPlayerPosition.position) < 0.1f)
-            { 
+            {
                 resetPlayerPosition = false;
                 gameController.ShowFirstTapButton();
             }
@@ -81,7 +81,8 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D colisor)
     {
         //  GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>().volume = 0.2f;
-        gameController.GameOver();
+        if (!gameController.gameOverPanel.activeSelf)
+            gameController.GameOver();
 
     }
 }
