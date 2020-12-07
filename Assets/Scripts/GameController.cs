@@ -70,7 +70,10 @@ public class GameController : MonoBehaviour
     {
         readyRamdomTexts = new List<string>();
         readyRamdomTexts.Add("Enjoy");
-        readyRamdomTexts.Add("Thanks for playing");
+        readyRamdomTexts.Add("Relax");
+        readyRamdomTexts.Add("Thanks for playing!");
+        readyRamdomTexts.Add("Change the difficulty in options anytime");
+        readyRamdomTexts.Add("Use headphones for better experience");
     }
 
     public void StartGame()
@@ -78,7 +81,7 @@ public class GameController : MonoBehaviour
         HideMenu();
 
         ReadyText.gameObject.SetActive(true);
-        ReadyText.text = readyRamdomTexts[Random.Range(0, 2)];
+        ReadyText.text = readyRamdomTexts[Random.Range(0, readyRamdomTexts.Count)];
         ReadyText.GetComponent<Animator>().Play("FadeIn_down_to_up");
 
         playerController.showingPlayer = true;
