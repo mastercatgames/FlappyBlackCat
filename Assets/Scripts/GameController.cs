@@ -124,6 +124,14 @@ public class GameController : MonoBehaviour
                 buttons.GetComponent<Animator>().speed = 3f;
             }
 
+            if (buttons.gameObject.name == "ContinueButton")
+            {
+                buttons.Find("Icon").GetComponent<Animator>().Play("FadeOut");
+                buttons.Find("Icon").GetComponent<Animator>().speed = 3f;
+                buttons.Find("Text").GetComponent<Animator>().Play("FadeOut");
+                buttons.Find("Text").GetComponent<Animator>().speed = 3f;                
+            }
+
             Invoke("AfterHideGameOver", 1f);
         }
     }
@@ -195,8 +203,12 @@ public class GameController : MonoBehaviour
         jumpButton.SetActive(false);
         scoreText.GetComponent<Animator>().Play("FadeOut");
         scoreText.GetComponent<Animator>().speed = 3f;
-
         spawnPipes.CancelInvoke();
+
+        if (PlayerPrefs.GetInt("removeAds") == 1)
+        {
+            gameOverPanel.transform.Find("ContinueButton").Find("Icon").gameObject.SetActive(false);
+        }
 
         //Player
         playerController.transform.parent = null;
@@ -241,12 +253,15 @@ public class GameController : MonoBehaviour
         StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("HomeButton").gameObject, true, 1f));
 
         //Advertisement
-        PlayerPrefs.SetInt("countToShowAd", PlayerPrefs.GetInt("countToShowAd") + 1);
-        
-        if (PlayerPrefs.GetInt("countToShowAd") == 3)
+        if (PlayerPrefs.GetInt("removeAds") == 0)
         {
-            PlayerPrefs.SetInt("countToShowAd", 0);
-            StartCoroutine(unityAds.ShowVideoAd());
+            PlayerPrefs.SetInt("countToShowAd", PlayerPrefs.GetInt("countToShowAd") + 1);
+
+            if (PlayerPrefs.GetInt("countToShowAd") == 3)
+            {
+                PlayerPrefs.SetInt("countToShowAd", 0);
+                StartCoroutine(unityAds.ShowVideoAd());
+            }
         }
     }
 
@@ -282,12 +297,21 @@ public class GameController : MonoBehaviour
 
     public void Continue()
     {
+        isContinue = true;
+        
         if (PlayerPrefs.GetInt("countToShowAd") > 0)
         {
             PlayerPrefs.SetInt("countToShowAd", PlayerPrefs.GetInt("countToShowAd") - 1);
+        }        
+
+        if (PlayerPrefs.GetInt("removeAds") == 0)
+        {
+            unityAds.ShowRewardedVideo();
         }
-        isContinue = true;
-        unityAds.ShowRewardedVideo();
+        else
+        {
+            RestartGame();
+        }
     }
 
     public IEnumerator SetActiveAfterTime(GameObject gameObject, bool active, float delay)
