@@ -18,4 +18,9 @@ public class SocialMedia : MonoBehaviour
     {
         Application.OpenURL("https://www.facebook.com/mastercatgamestudio/");
     }
+
+    public void OpenCustomURL(string url)
+    {
+        Application.OpenURL(url);
+    }
 }
