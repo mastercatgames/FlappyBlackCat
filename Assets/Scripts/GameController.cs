@@ -134,6 +134,11 @@ public class GameController : MonoBehaviour
                 buttons.Find("Text").GetComponent<Animator>().Play("FadeOut");
                 buttons.Find("Text").GetComponent<Animator>().speed = 3f;                
             }
+            else if (buttons.gameObject.name == "NoAds")
+            {
+                buttons.Find("Price").GetComponent<Animator>().Play("FadeOut");
+                buttons.Find("Price").GetComponent<Animator>().speed = 3f;             
+            }
 
             Invoke("AfterHideGameOver", 1f);
         }
@@ -244,8 +249,16 @@ public class GameController : MonoBehaviour
             }
             else
             {
-                StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("ContinueButton").gameObject, true, 0.8f));
-                StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("RetryButton").gameObject, true, 3f));
+                if (PlayerPrefs.GetInt("removeAds") == 1)
+                {
+                    StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("RetryButton").gameObject, true, 1f));
+                }
+                else
+                {
+                    StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("RetryButton").gameObject, true, 4f));
+                }
+
+                StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("ContinueButton").gameObject, true, 0.8f));               
             }
         }
         else
@@ -253,14 +266,15 @@ public class GameController : MonoBehaviour
             StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("RetryButton").gameObject, true, 1f));
         }
 
-        StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("HomeButton").gameObject, true, 1f));
+        StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("HomeButton").gameObject, true, 1f));        
 
         //Advertisement
         if (PlayerPrefs.GetInt("removeAds") == 0)
         {
+            StartCoroutine(SetActiveAfterTime(gameOverPanel.transform.Find("NoAds").gameObject, true, 1f));
             PlayerPrefs.SetInt("countToShowAd", PlayerPrefs.GetInt("countToShowAd") + 1);
 
-            if (PlayerPrefs.GetInt("countToShowAd") == 3)
+            if (PlayerPrefs.GetInt("countToShowAd") == 5)
             {
                 PlayerPrefs.SetInt("countToShowAd", 0);
                 StartCoroutine(unityAds.ShowVideoAd());
