@@ -85,7 +85,7 @@ public class UnityAds : MonoBehaviour
     public void RestoreProduct(Product product)
     {
         //Calls when user reinstall the app
-        if (product.definition.id == "NoAds")
+        if (product.definition.id == "no_ads2")
         {
             RemoveAds();
         }
